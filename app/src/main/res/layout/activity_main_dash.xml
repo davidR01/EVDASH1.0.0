@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ecng_evdash07.evdash100.MainDASH">
+    tools:context="com.ecng_evdash07.evdash100.MainDASH"
+    tools:layout_editor_absoluteY="73dp"
+    tools:layout_editor_absoluteX="0dp">
 
     <ImageButton
         android:id="@+id/DiagnosticButton"
@@ -14,11 +16,69 @@
         android:onClick="onButtonClick"
         android:tint="@color/colorPrimaryDark"
         app:srcCompat="@android:drawable/ic_menu_manage"
+        android:layout_marginEnd="42dp"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginEnd="42dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="45dp"
-        android:layout_marginRight="42dp" />
+        android:layout_marginBottom="16dp" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="50dp"
+        android:layout_height="65dp"
+        app:srcCompat="@drawable/battery_eighty"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintBottom_creator="1"
+        app:layout_constraintBottom_toTopOf="@+id/DiagnosticButton"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        android:layout_marginBottom="38dp"
+        app:layout_constraintLeft_toRightOf="@+id/mapFragment"
+        app:layout_constraintHorizontal_bias="0.523"
+        android:layout_marginRight="8dp" />
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="450dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtSearchLocation"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintTop_creator="1" />
+
+    <EditText
+        android:id="@+id/txtSearchLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:ems="10"
+        android:hint="Search Location"
+        android:inputType="textPersonName"
+        app:layout_constraintLeft_toLeftOf="@+id/mapFragment"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintTop_creator="1" />
+
+    <Button
+        android:id="@+id/goBtn"
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="29dp"
+        android:text="Go"
+        android:onClick="geoLocate"
+        tools:layout_constraintRight_creator="1"
+        android:layout_height="0dp"
+        app:layout_constraintRight_toRightOf="@+id/mapFragment"
+        app:layout_constraintBaseline_toBaselineOf="@+id/txtSearchLocation"
+        tools:layout_constraintBaseline_creator="1" />
+
 </android.support.constraint.ConstraintLayout>
