@@ -12,4 +12,17 @@ public class TSOInterface extends AppCompatActivity {
         setContentView(R.layout.activity_tsointerface);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

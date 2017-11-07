@@ -5,51 +5,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.ecng_evdash07.evdash100.MainDASH"
-    tools:layout_editor_absoluteY="73dp"
-    tools:layout_editor_absoluteX="0dp">
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="73dp">
 
     <ImageButton
         android:id="@+id/DiagnosticButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="42dp"
         android:backgroundTint="@android:color/holo_green_light"
         android:onClick="onButtonClick"
         android:tint="@color/colorPrimaryDark"
-        app:srcCompat="@android:drawable/ic_menu_manage"
-        android:layout_marginEnd="42dp"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="16dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_manage"
+        tools:layout_constraintBottom_creator="1"
+        tools:layout_constraintRight_creator="1" />
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="50dp"
+        android:id="@+id/imageView_Battery"
+        android:layout_width="0dp"
         android:layout_height="65dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mapFragment"
+        app:layout_constraintEnd_toEndOf="@+id/DiagnosticButton"
+        app:layout_constraintStart_toStartOf="@+id/DiagnosticButton"
+        app:layout_constraintTop_toTopOf="@+id/mapFragment"
         app:srcCompat="@drawable/battery_eighty"
-        tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"
-        app:layout_constraintBottom_toTopOf="@+id/DiagnosticButton"
-        app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
-        android:layout_marginBottom="38dp"
-        app:layout_constraintLeft_toRightOf="@+id/mapFragment"
-        app:layout_constraintHorizontal_bias="0.523"
-        android:layout_marginRight="8dp" />
+        tools:layout_constraintRight_creator="1" />
 
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.google.android.gms.maps.MapFragment"
-        android:layout_width="450dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/goBtn"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtSearchLocation"
-        app:layout_constraintVertical_bias="0.0"
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
@@ -59,12 +55,11 @@
         android:id="@+id/txtSearchLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="1dp"
         android:ems="10"
-        android:hint="Search Location"
+        android:hint="@string/search_location"
         android:inputType="textPersonName"
-        app:layout_constraintLeft_toLeftOf="@+id/mapFragment"
+        app:layout_constraintStart_toStartOf="@+id/mapFragment"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintTop_creator="1" />
@@ -72,13 +67,27 @@
     <Button
         android:id="@+id/goBtn"
         android:layout_width="wrap_content"
-        android:layout_marginEnd="29dp"
-        android:text="Go"
-        android:onClick="geoLocate"
-        tools:layout_constraintRight_creator="1"
         android:layout_height="0dp"
-        app:layout_constraintRight_toRightOf="@+id/mapFragment"
-        app:layout_constraintBaseline_toBaselineOf="@+id/txtSearchLocation"
-        tools:layout_constraintBaseline_creator="1" />
+        android:layout_marginEnd="142dp"
+        android:layout_marginTop="2dp"
+        android:onClick="geoLocate"
+        android:text="@string/go"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_constraintBaseline_creator="1"
+        tools:layout_constraintRight_creator="1" />
+
+    <TextView
+        android:id="@+id/textView_Battery"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:layout_marginBottom="71dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginTop="65dp"
+        android:text="@string/battery_75"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/DiagnosticButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView_Battery" />
 
 </android.support.constraint.ConstraintLayout>
