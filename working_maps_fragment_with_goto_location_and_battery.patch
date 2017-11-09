@@ -1,0 +1,488 @@
+Index: app/src/main/java/com/ecng_evdash07/evdash100/TSOInterface.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ecng_evdash07/evdash100/TSOInterface.java	(revision f3763db14f7894beed2274ab7cc52752e816381f)
++++ app/src/main/java/com/ecng_evdash07/evdash100/TSOInterface.java	(revision )
+@@ -12,4 +12,17 @@
+         setContentView(R.layout.activity_tsointerface);
+         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+     }
++
++
++
++
++
++
++
++
++
++
++
++
++
+ }
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision f3763db14f7894beed2274ab7cc52752e816381f)
++++ app/build.gradle	(revision )
+@@ -1,12 +1,12 @@
+ apply plugin: 'com.android.application'
+ 
+ android {
+-    compileSdkVersion 25
+-    buildToolsVersion "25.0.3"
++    compileSdkVersion 26
++    buildToolsVersion '26.0.2'
+     defaultConfig {
+         applicationId "com.ecng_evdash07.evdash100"
+         minSdkVersion 21
+-        targetSdkVersion 25
++        targetSdkVersion 26
+         versionCode 1
+         versionName "1.0"
+         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+@@ -24,9 +24,9 @@
+     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+         exclude group: 'com.android.support', module: 'support-annotations'
+     })
+-    compile 'com.android.support:appcompat-v7:25.3.1'
++    compile 'com.android.support:appcompat-v7:26.1.0'
+     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+-    compile 'com.android.support:design:25.3.1'
++    compile 'com.android.support:design:26.1.0'
+     testCompile 'junit:junit:4.12'
+-    compile 'com.google.android.gms:play-services-maps:11.0.4'
++    compile 'com.google.android.gms:play-services-maps:11.4.2'
+ }
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision f3763db14f7894beed2274ab7cc52752e816381f)
++++ app/src/main/res/values/strings.xml	(revision )
+@@ -14,4 +14,7 @@
+     <string name="permission_rationale">"Contacts permissions are needed for providing email
+         completions."
+     </string>
++    <string name="search_location">Search Location</string>
++    <string name="go">Go</string>
++    <string name="battery_75">BATTERY: 75%</string>
+ </resources>
+Index: app/src/main/java/com/ecng_evdash07/evdash100/MainDASH.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/ecng_evdash07/evdash100/MainDASH.java	(revision f3763db14f7894beed2274ab7cc52752e816381f)
++++ app/src/main/java/com/ecng_evdash07/evdash100/MainDASH.java	(revision )
+@@ -1,14 +1,24 @@
+ package com.ecng_evdash07.evdash100;
+ 
++import android.Manifest;
+ import android.app.Dialog;
+ import android.content.Intent;
++import android.content.IntentFilter;
+ import android.content.pm.ActivityInfo;
++import android.content.pm.PackageManager;
+ import android.location.Address;
+ import android.location.Geocoder;
++import android.os.BatteryManager;
++import android.os.Build;
+ import android.os.Bundle;
++import android.os.Handler;
++import android.support.annotation.NonNull;
++import android.support.v4.app.ActivityCompat;
+ import android.support.v7.app.AppCompatActivity;
+ import android.view.View;
+ import android.widget.EditText;
++import android.widget.ImageView;
++import android.widget.TextView;
+ import android.widget.Toast;
+ 
+ import com.google.android.gms.common.ConnectionResult;
+@@ -23,52 +33,92 @@
+ import java.io.IOException;
+ import java.util.List;
+ 
++
+ public class MainDASH extends AppCompatActivity implements OnMapReadyCallback {
+ 
++    ImageView imageView_Battery;////////////////////////////////////////
++    TextView textView_Battery;/////////////////////////////////////////
++
++    Handler handler;///////////////////////////////////////////
++    Runnable runnable;///////////////////////////////////////
++
++
+     GoogleMap dashGoogleMap;
++    private final static int MY_PERMISSION_FINE_LOCATION = 101;
++
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_main_dash);
+         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+-        if(googleServicesAvaliable())
+-        {Toast.makeText(this, "Checking for play_services", Toast.LENGTH_SHORT).show();}
++        if (googleServicesAvaliable()) {
++            Toast.makeText(this, "Checking for play_services", Toast.LENGTH_SHORT).show();
++        }
+         initMap();
+-    }
++
++
++//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
++        imageView_Battery = (ImageView) findViewById(R.id.imageView_Battery);///////////////////
++        textView_Battery = (TextView) findViewById(R.id.textView_Battery);///////////////////////
++
++        runnable = new Runnable() {
++            @Override
++            public void run() {
++
++                int level = (int) batterylevel();
++
++                textView_Battery.setText("BATTERY: " + level + "%");
++
++                if (level > 75) {
++                    imageView_Battery.setImageResource(R.drawable.battery_full);
++                }
+ 
+-    private void initMap()
+-    {
++                if (level > 50 && level <= 75) {
++                    imageView_Battery.setImageResource(R.drawable.battery_eighty);
++                }
++
++                if (level > 25 && level <= 50) {
++                    imageView_Battery.setImageResource(R.drawable.battery_fifty);
++                }
++
++                if (level <= 25) {
++                    imageView_Battery.setImageResource(R.drawable.battery_twentyfive);
++                }
++
++                handler.postDelayed(runnable, 5000);
++            }
++        };
++
++        handler = new Handler();
++        handler.postDelayed(runnable, 0);
++//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
++    }
++
++    private void initMap() {
+         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+         mapFragment.getMapAsync(this);
+ 
+     }
+ 
+ 
+-    public void onButtonClick(View v)
+-    {
+-        if(v.getId()==R.id.DiagnosticButton);
++    public void onButtonClick(View v) {
++        if (v.getId() == R.id.DiagnosticButton) ;
+ 
+         Intent i = new Intent(MainDASH.this, loginTSO.class);
+         startActivity(i);
+     }
+ 
+ 
+-    public boolean googleServicesAvaliable()
+-    {
++    public boolean googleServicesAvaliable() {
+         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+         int isAvaliable = api.isGooglePlayServicesAvailable(this);
+-        if (isAvaliable== ConnectionResult.SUCCESS)
+-        {
++        if (isAvaliable == ConnectionResult.SUCCESS) {
+             return true;
+-        }
+-        else if (api.isUserResolvableError(isAvaliable))
+-        {
+-            Dialog dialog = api.getErrorDialog(this,isAvaliable,0);
++        } else if (api.isUserResolvableError(isAvaliable)) {
++            Dialog dialog = api.getErrorDialog(this, isAvaliable, 0);
+             dialog.show();
+-        }
+-        else
+-        {
++        } else {
+             Toast.makeText(this, "Cannot connect to play services", Toast.LENGTH_LONG).show();
+         }
+         return false;
+@@ -77,25 +127,79 @@
+ 
+ 
+     @Override
+-    public void onMapReady(GoogleMap googleMap)
+-    {
+-            dashGoogleMap = googleMap;    ///////////////////////////////////////////
+-            goToLocationZoom(10.6918, -61.2225,10);  ////////////////////////////////////
+-    }
++    public void onMapReady(GoogleMap googleMap) {
++        dashGoogleMap = googleMap;    ///////////////////////////////////////////
++        goToLocationZoom(10.6918, -61.2225, 9);  ////////////////////////////////////
++        dashGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
++
++
++        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
++            // TODO: Consider calling
++            //    ActivityCompat#requestPermissions
++            // here to request the missing permissions, and then overriding
++            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
++            //                                          int[] grantResults)
++            // to handle the case where the user grants the permission. See the documentation
++            // for ActivityCompat#requestPermissions for more details.
++            dashGoogleMap.setMyLocationEnabled(true);
++        } else {
++            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
++                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_FINE_LOCATION);
++            }
+ 
+-    private void goToLocation(double latitude, double longitude)
+-    {
+-        LatLng ll = new LatLng(latitude,longitude);
++        }
++
++
++      /*  if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
++            // TODO: Consider calling
++            //ActivityCompat#requestPermissions
++            // here to request the missing permissions, and then overriding
++            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
++            //                                          int[] grantResults)
++            //to handle the case where the user grants the permission. See the documentation
++            // for ActivityCompat#requestPermissions for more details.
++            dashGoogleMap.setMyLocationEnabled(true);
++        } else {
++            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
++                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_FINE_LOCATION);
++            }
++        }*/
++    }
++
++    @Override
++    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
++        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
++
++        switch (requestCode) {
++            case MY_PERMISSION_FINE_LOCATION:
++
++                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
++                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
++
++                        dashGoogleMap.setMyLocationEnabled(true);
++                    }
++
++                } else {
++                    Toast.makeText(getApplicationContext(), "The MAP requires Location Permissions to be granted", Toast.LENGTH_LONG).show();
++                }
++
++                break;
++        }
++    }
++
++
++    private void goToLocation(double latitude, double longitude) {
++        LatLng ll = new LatLng(latitude, longitude);
+         CameraUpdate update = CameraUpdateFactory.newLatLng(ll);
+         dashGoogleMap.moveCamera(update);
+-
+     }
+-    private void goToLocationZoom(double latitude, double longitude,float zoom)//zooms in to the set  coordinates in map view
++
++
++    private void goToLocationZoom(double latitude, double longitude, float zoom)//zooms in to the set  coordinates in map view
+     {
+-        LatLng ll = new LatLng(latitude,longitude);
+-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll,zoom);
++        LatLng ll = new LatLng(latitude, longitude);
++        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
+         dashGoogleMap.moveCamera(update);
+-
+     }
+ 
+     public void geoLocate(View view) throws IOException {
+@@ -103,20 +207,41 @@
+         String location = et.getText().toString();  /// what user enters as string
+ 
+         Geocoder geocode = new Geocoder(this); //takes any string and converts into latitude and long
+-        List<Address>list = geocode.getFromLocationName(location,1);
++        List<Address> list = geocode.getFromLocationName(location, 1);
+ 
+         Address address = list.get(0);
+ 
+         String locality = address.getLocality();
+-        Toast.makeText(this,locality,Toast.LENGTH_LONG).show();
++        Toast.makeText(this, locality, Toast.LENGTH_LONG).show();
+ 
+-        double latitude  = address.getLatitude();
++        double latitude = address.getLatitude();
+         double longitude = address.getLongitude();
+ 
+-        goToLocationZoom(latitude,longitude, 12);
++        goToLocationZoom(latitude, longitude, 13);
+ 
++    }
+ 
++    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
++    public float batterylevel() {
++        Intent batteryIntent = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
++        int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
++        int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+ 
++        if (level == -1 || scale == -1) {
++            return 50;
++        }
+ 
++        return ((float) level / (float) scale) * 100;
+     }
+-}
++    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
++
++    ////DECLARATION OF VARIABLES FOR RANDOM SPEED VALUE GENERATOR
++    //int random;
++
++
++
++
++
++    /////////////////////////////////////////////////////////////////////////////////////////////////////////
++
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_main_dash.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_main_dash.xml	(revision f3763db14f7894beed2274ab7cc52752e816381f)
++++ app/src/main/res/layout/activity_main_dash.xml	(revision )
+@@ -5,51 +5,47 @@
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+     tools:context="com.ecng_evdash07.evdash100.MainDASH"
+-    tools:layout_editor_absoluteY="73dp"
+-    tools:layout_editor_absoluteX="0dp">
++    tools:layout_editor_absoluteX="0dp"
++    tools:layout_editor_absoluteY="73dp">
+ 
+     <ImageButton
+         android:id="@+id/DiagnosticButton"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
++        android:layout_marginBottom="16dp"
++        android:layout_marginEnd="42dp"
+         android:backgroundTint="@android:color/holo_green_light"
+         android:onClick="onButtonClick"
+         android:tint="@color/colorPrimaryDark"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
+         app:srcCompat="@android:drawable/ic_menu_manage"
+-        android:layout_marginEnd="42dp"
+-        tools:layout_constraintRight_creator="1"
+         tools:layout_constraintBottom_creator="1"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintRight_toRightOf="parent"
+-        android:layout_marginBottom="16dp" />
++        tools:layout_constraintRight_creator="1" />
+ 
+     <ImageView
+-        android:id="@+id/imageView2"
+-        android:layout_width="50dp"
++        android:id="@+id/imageView_Battery"
++        android:layout_width="0dp"
+         android:layout_height="65dp"
++        app:layout_constraintBottom_toBottomOf="@+id/mapFragment"
++        app:layout_constraintEnd_toEndOf="@+id/DiagnosticButton"
++        app:layout_constraintStart_toStartOf="@+id/DiagnosticButton"
++        app:layout_constraintTop_toTopOf="@+id/mapFragment"
+         app:srcCompat="@drawable/battery_eighty"
+-        tools:layout_constraintRight_creator="1"
+         tools:layout_constraintBottom_creator="1"
+-        app:layout_constraintBottom_toTopOf="@+id/DiagnosticButton"
+-        app:layout_constraintRight_toRightOf="parent"
+         tools:layout_constraintLeft_creator="1"
+-        android:layout_marginBottom="38dp"
+-        app:layout_constraintLeft_toRightOf="@+id/mapFragment"
+-        app:layout_constraintHorizontal_bias="0.523"
+-        android:layout_marginRight="8dp" />
++        tools:layout_constraintRight_creator="1" />
+ 
+     <fragment
+         android:id="@+id/mapFragment"
+         android:name="com.google.android.gms.maps.MapFragment"
+-        android:layout_width="450dp"
++        android:layout_width="0dp"
+         android:layout_height="0dp"
+-        android:layout_marginBottom="6dp"
++        android:layout_marginBottom="4dp"
+         app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintHorizontal_bias="0.0"
+-        app:layout_constraintLeft_toLeftOf="parent"
+-        app:layout_constraintRight_toRightOf="parent"
++        app:layout_constraintEnd_toEndOf="@+id/goBtn"
++        app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/txtSearchLocation"
+-        app:layout_constraintVertical_bias="0.0"
+         tools:layout_constraintBottom_creator="1"
+         tools:layout_constraintLeft_creator="1"
+         tools:layout_constraintRight_creator="1"
+@@ -59,12 +55,11 @@
+         android:id="@+id/txtSearchLocation"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:layout_marginStart="8dp"
+         android:layout_marginTop="1dp"
+         android:ems="10"
+-        android:hint="Search Location"
++        android:hint="@string/search_location"
+         android:inputType="textPersonName"
+-        app:layout_constraintLeft_toLeftOf="@+id/mapFragment"
++        app:layout_constraintStart_toStartOf="@+id/mapFragment"
+         app:layout_constraintTop_toTopOf="parent"
+         tools:layout_constraintLeft_creator="1"
+         tools:layout_constraintTop_creator="1" />
+@@ -72,13 +67,27 @@
+     <Button
+         android:id="@+id/goBtn"
+         android:layout_width="wrap_content"
+-        android:layout_marginEnd="29dp"
+-        android:text="Go"
+-        android:onClick="geoLocate"
+-        tools:layout_constraintRight_creator="1"
+         android:layout_height="0dp"
+-        app:layout_constraintRight_toRightOf="@+id/mapFragment"
+-        app:layout_constraintBaseline_toBaselineOf="@+id/txtSearchLocation"
+-        tools:layout_constraintBaseline_creator="1" />
++        android:layout_marginEnd="142dp"
++        android:layout_marginTop="2dp"
++        android:onClick="geoLocate"
++        android:text="@string/go"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintTop_toTopOf="parent"
++        tools:layout_constraintBaseline_creator="1"
++        tools:layout_constraintRight_creator="1" />
++
++    <TextView
++        android:id="@+id/textView_Battery"
++        android:layout_width="wrap_content"
++        android:layout_height="15dp"
++        android:layout_marginBottom="71dp"
++        android:layout_marginEnd="28dp"
++        android:layout_marginTop="65dp"
++        android:text="@string/battery_75"
++        android:textSize="12sp"
++        app:layout_constraintBottom_toBottomOf="@+id/DiagnosticButton"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintTop_toTopOf="@+id/imageView_Battery" />
+ 
+ </android.support.constraint.ConstraintLayout>
