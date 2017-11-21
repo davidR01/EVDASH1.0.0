@@ -21,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdate;
@@ -44,11 +47,14 @@ public class MainDASH extends AppCompatActivity implements OnMapReadyCallback {
 
 
     GoogleMap dashGoogleMap;
+    AdView mAdView;
     private final static int MY_PERMISSION_FINE_LOCATION = 101;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MobileAds.initialize(this ,"ca-app-pub-3940256099942544~3347511713");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_dash);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -56,6 +62,11 @@ public class MainDASH extends AppCompatActivity implements OnMapReadyCallback {
             Toast.makeText(this, "Checking for play_services", Toast.LENGTH_SHORT).show();
         }
         initMap();
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        mAdView=(AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
