@@ -59,7 +59,7 @@ public class SystemDiagnostics extends AppCompatActivity {
                     loadMetrics();
                     FileOutputStream file = openFileOutput("ExportedData.csv", MODE_PRIVATE);
                     OutputStreamWriter outputFile = new OutputStreamWriter(file);
-                    outputFile.write("Battery Voltage,Distance Travelled,Energy Used,Coolant Temperature");
+                    outputFile.write("Battery Voltage,Distance Travelled,Energy Used,Coolant Temperature\n");
 
                     for(int i = 0; i < vehicleMetrics.size();i++){
                         outputFile.write(vehicleMetrics.get(i).getBatteryVoltage()+","+vehicleMetrics.get(i).getDistance()+","+vehicleMetrics.get(i).getEnergy()+","+vehicleMetrics.get(i).getCoolantTemp()+"\n");
