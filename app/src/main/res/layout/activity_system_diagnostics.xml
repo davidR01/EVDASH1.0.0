@@ -7,86 +7,83 @@
     tools:context="com.ecng_evdash07.evdash100.SystemDiagnostics"
     tools:layout_editor_absoluteY="73dp">
 
-    <TextView
-        android:id="@+id/iv_labelTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Instantaneous Voltage"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/dt_labelTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Distance Travelled"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/m_labelTextView"
-        app:layout_constraintStart_toEndOf="@+id/iv_labelTextView"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/m_labelTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Milage"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
-        android:id="@+id/logBtn"
+        android:id="@+id/btnLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="LOG CURRENT STATE"
+        android:layout_marginTop="8dp"
+        android:text="@string/log_data"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCoolTemp" />
 
-    <TextView
-        android:id="@+id/m_valueTextView"
+    <Button
+        android:id="@+id/btnExport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Milage Value"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/m_labelTextView" />
-
-    <TextView
-        android:id="@+id/dt_valueTextView"
-        android:layout_width="98dp"
-        android:layout_height="17dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Distance Value"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/m_valueTextView"
-        app:layout_constraintStart_toEndOf="@+id/iv_valueTextView"
-        app:layout_constraintTop_toBottomOf="@+id/dt_labelTextView" />
-
-    <TextView
-        android:id="@+id/iv_valueTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Voltage Value"
-        android:textSize="14sp"
+        android:text="@string/export"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_labelTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAvgDistance" />
 
+    <TextView
+        android:id="@+id/tvBatteryVoltage"
+        android:layout_width="100sp"
+        android:layout_height="40sp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/batteryvoltage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAvgEnergy"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/average_energy_use"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSumDistance"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/total_distance_travelled"
+        app:layout_constraintEnd_toStartOf="@+id/tvAvgEnergy"
+        app:layout_constraintStart_toEndOf="@+id/tvBatteryVoltage"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAvgDistance"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/average_distance"
+        app:layout_constraintEnd_toStartOf="@+id/tvSumDistance"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBatteryVoltage" />
+
+    <TextView
+        android:id="@+id/tvCoolTemp"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/coolant_temperature"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvSumDistance"
+        app:layout_constraintTop_toBottomOf="@+id/tvAvgEnergy" />
 </android.support.constraint.ConstraintLayout>
