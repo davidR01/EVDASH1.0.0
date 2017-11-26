@@ -2,16 +2,12 @@ package com.ecng_evdash07.evdash100;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,7 +34,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class MainDASH extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+public class MainDASH extends AppCompatActivity implements OnMapReadyCallback {
 
     ImageView imageView_Battery;////////////////////////////////////////
     TextView textView_Battery;/////////////////////////////////////////
@@ -47,37 +43,17 @@ public class MainDASH extends AppCompatActivity implements OnMapReadyCallback, L
     Runnable runnable;///////////////////////////////////////
 
 
-    GoogleMap dashGoogleMap;  /// create google map variable
-    private final static int MY_PERMISSION_FINE_LOCATION = 101; //required to point to which runtime permissions to access
+    GoogleMap dashGoogleMap;
+    private final static int MY_PERMISSION_FINE_LOCATION = 101;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {  // creates the main activity screen
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_dash);
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);  /// sets the orientation of the app to landscape at runtime reguagrdless if screen rotation is enabled
-        if (googleServicesAvaliable()) {///the map requires play services this call the function to checks to see if it is avaliable
-            Toast.makeText(this, "Checking for play_services", Toast.LENGTH_SHORT).show();  /// if it is avaliable a message is diplayed this is for testing purposes
-
-            LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-                this.onLocationChanged(null);//initilize and set to 0
-            }
-            else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_FINE_LOCATION);
-                }
-
-            }
-
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        if (googleServicesAvaliable()) {
+            Toast.makeText(this, "Checking for play_services", Toast.LENGTH_SHORT).show();
         }
         initMap();
 
@@ -119,31 +95,31 @@ public class MainDASH extends AppCompatActivity implements OnMapReadyCallback, L
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
-    private void initMap() {  ////initializes the map fragmant
+    private void initMap() {
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
         mapFragment.getMapAsync(this);
 
     }
 
 
-    public void onButtonClick(View v) {     ////Gives functionality to  the diagnostic button on the home screen
+    public void onButtonClick(View v) {
         if (v.getId() == R.id.DiagnosticButton) ;
 
-        Intent i = new Intent(MainDASH.this, loginTSO.class);  //when click goes to the login screen
+        Intent i = new Intent(MainDASH.this, loginTSO.class);
         startActivity(i);
     }
 
 
-    public boolean googleServicesAvaliable() {   // method to check for Google play services
-        GoogleApiAvailability api = GoogleApiAvailability.getInstance(); // gets instance of google api avaliability
+    public boolean googleServicesAvaliable() {
+        GoogleApiAvailability api = GoogleApiAvailability.getInstance();
         int isAvaliable = api.isGooglePlayServicesAvailable(this);
-        if (isAvaliable == ConnectionResult.SUCCESS) {  // if it is avaliable return true
+        if (isAvaliable == ConnectionResult.SUCCESS) {
             return true;
-        } else if (api.isUserResolvableError(isAvaliable)) { // if not avaliable display an error dialog in the form of a popup msg
+        } else if (api.isUserResolvableError(isAvaliable)) {
             Dialog dialog = api.getErrorDialog(this, isAvaliable, 0);
             dialog.show();
         } else {
-            Toast.makeText(this, "Cannot connect to play services", Toast.LENGTH_LONG).show(); // display message if cannot connect to google play services
+            Toast.makeText(this, "Cannot connect to play services", Toast.LENGTH_LONG).show();
         }
         return false;
 
@@ -152,9 +128,9 @@ public class MainDASH extends AppCompatActivity implements OnMapReadyCallback, L
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        dashGoogleMap = googleMap;    ////// links the variable created to the google map
-        goToLocationZoom(10.6918, -61.2225, 9);  ///////////// calls the gotolocationZoom function that take co-ordinates and moves the camera to that location at the zoom level set
-        dashGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);  // changes the default map type to hybrid
+        dashGoogleMap = googleMap;    ///////////////////////////////////////////
+        goToLocationZoom(10.6918, -61.2225, 9);  ////////////////////////////////////
+        dashGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -173,6 +149,21 @@ public class MainDASH extends AppCompatActivity implements OnMapReadyCallback, L
 
         }
 
+
+      /*  if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            //to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            dashGoogleMap.setMyLocationEnabled(true);
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSION_FINE_LOCATION);
+            }
+        }*/
     }
 
     @Override
@@ -226,7 +217,7 @@ public class MainDASH extends AppCompatActivity implements OnMapReadyCallback, L
         double latitude = address.getLatitude();
         double longitude = address.getLongitude();
 
-        goToLocationZoom(latitude, longitude, 15);
+        goToLocationZoom(latitude, longitude, 13);
 
     }
 
@@ -241,41 +232,6 @@ public class MainDASH extends AppCompatActivity implements OnMapReadyCallback, L
         }
 
         return ((float) level / (float) scale) * 100;
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        TextView speedTxt =(TextView)this.findViewById(R.id.speedId);
-
-                if (location==null){
-
-                    speedTxt.setText("-.- km/h");
-                }
-
-                else {
-
-                    int nCurrentSpeed = (int) (location.getSpeed()*3600/1000);
-                    speedTxt.setText(nCurrentSpeed + "km/h");
-                }
-
-
-
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
