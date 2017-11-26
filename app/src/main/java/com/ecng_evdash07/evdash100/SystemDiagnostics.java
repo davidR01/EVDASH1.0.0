@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,12 +24,15 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class SystemDiagnostics extends AppCompatActivity {
 
     //Declaring Variables
     Button btnExport, btnLog;
     TextView tvBatteryVoltage, tvSumDistance, tvAvgEnergy, tvCoolTemp, tvAvgDistance;
+    //Using an array list to save all my data
+    ArrayList<VehicleMetrics> vehicleMetrics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +48,65 @@ public class SystemDiagnostics extends AppCompatActivity {
         tvAvgDistance = (TextView) findViewById(R.id.tvAvgDistance);
         btnExport = (Button) findViewById(R.id.btnExport);
         btnLog = (Button) findViewById(R.id.btnLog);
+
+        vehicleMetrics = new ArrayList<VehicleMetrics>();
+
+
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try{
+                    loadMetrics();
+                    FileOutputStream file = openFileOutput("ExportedData.csv", MODE_PRIVATE);
+                    OutputStreamWriter outputFile = new OutputStreamWriter(file);
+                    outputFile.write("Battery Voltage,Distance Travelled,Energy Used,Coolant Temperature");
+
+                    for(int i = 0; i < vehicleMetrics.size();i++){
+                        outputFile.write(vehicleMetrics.get(i).getBatteryVoltage()+","+vehicleMetrics.get(i).getDistance()+","+vehicleMetrics.get(i).getEnergy()+","+vehicleMetrics.get(i).getCoolantTemp()+"\n");
+
+                    }
+                    outputFile.flush();
+                    outputFile.close();
+
+                    Toast.makeText(SystemDiagnostics.this, "Exported Successfully",Toast.LENGTH_SHORT).show();
+
+                }
+                catch (IOException e){
+                    Toast.makeText(SystemDiagnostics.this, e.getMessage(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btnLog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //whatever the button does
+            }
+        });
     }
 
-    btnExport.SetOnClickListener
-    //whatever the button does
-    public void btnlog (View view){
-        //whatever the button does
+    private void loadMetrics() {
+
+        vehicleMetrics.clear();
+
+        InputStream input = getResources().openRawResource(R.raw.data);
+        String lineFF="";
+
+            try{
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+
+                while((lineFF = reader.readLine()) != null){
+                    StringTokenizer tokens = new StringTokenizer(lineFF, ",");
+                    VehicleMetrics vehicleMetric = new VehicleMetrics(tokens.nextToken(), tokens.nextToken(), tokens.nextToken(), tokens.nextToken());
+                    vehicleMetrics.add(vehicleMetric);
+                    Toast.makeText(SystemDiagnostics.this, "Loaded the data",Toast.LENGTH_SHORT).show();
+                }
+
+                reader.close();
+
+            }
+            catch (IOException e){
+                Toast.makeText(SystemDiagnostics.this, e.getMessage(), Toast.LENGTH_SHORT ).show();
+            }
     }
 }

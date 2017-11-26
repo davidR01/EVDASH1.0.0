@@ -2,10 +2,10 @@ package com.ecng_evdash07.evdash100;
 
 public class VehicleMetrics {
 
-    private int batteryVoltage;
-    private double distance, energy, coolantTemp;
+    private String batteryVoltage;
+    private String distance, energy, coolantTemp;
 
-    public VehicleMetrics(int batteryVoltage, double distance, double energy, double coolantTemp){
+    public VehicleMetrics(String batteryVoltage, String distance, String energy, String coolantTemp){
         this.batteryVoltage = batteryVoltage;
         this.distance = distance;
         this.energy = energy;
@@ -13,35 +13,35 @@ public class VehicleMetrics {
     }
 
 
-    public int getBatteryVoltage() {
+    public String getBatteryVoltage() {
         return batteryVoltage;
     }
 
-    public void setBatteryVoltage(int batteryVoltage) {
+    public void setBatteryVoltage(String batteryVoltage) {
         this.batteryVoltage = batteryVoltage;
     }
 
-    public double getDistance() {
+    public String  getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public void setDistance(String distance) {
         this.distance = distance;
     }
 
-    public double getEnergy() {
+    public String getEnergy() {
         return energy;
     }
 
-    public void setEnergy(double energy) {
+    public void setEnergy(String energy) {
         this.energy = energy;
     }
 
-    public double getCoolantTemp() {
+    public String getCoolantTemp() {
         return coolantTemp;
     }
 
-    public void setCoolantTemp(double coolantTemp) {
+    public void setCoolantTemp(String coolantTemp) {
         this.coolantTemp = coolantTemp;
     }
 }
