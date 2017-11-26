@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">EV DASH 1.0.0</string>
     <string name="title_activity_login_tso">Sign in</string>
 
@@ -17,4 +17,6 @@
     <string name="search_location">Search Location</string>
     <string name="go">Go</string>
     <string name="battery_75">BATTERY: 75%</string>
+    <string name="initialSpeed" tools:ignore="DuplicateDefinition">initialSpeed</string>
+
 </resources>
