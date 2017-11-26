@@ -56,10 +56,10 @@ public class loginTSO extends AppCompatActivity  {
                 if(UserName.equalsIgnoreCase("tso") && Pwd.equals("TSO123")){
                     Intent MainIntent = new Intent(loginTSO.this, TSOInterface.class);
                     startActivity(MainIntent);
-                    Toast.makeText(loginTSO.this,"You have successfully signed in.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(loginTSO.this,"You are Signed in Successfuly.", Toast.LENGTH_LONG).show();
                 }else
                 {
-                    Toast.makeText(loginTSO.this,"Username or Password is incorrect.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(loginTSO.this,"Sorry,User Name or Password is incorrect.", Toast.LENGTH_LONG).show();
                 }
             }
 
