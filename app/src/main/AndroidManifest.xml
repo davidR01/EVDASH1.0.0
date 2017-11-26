@@ -59,7 +59,10 @@
             android:label="@string/title_activity_settings" />
         <activity android:name=".Registration" />
         <activity android:name=".AdControl" />
-        <activity android:name=".SystemDiagnostics"></activity>
+        <activity android:name=".SystemDiagnostics" />
+        <activity android:name=".Non_PremAds"
+            android:screenOrientation="landscape"></activity>
+
     </application>
 
 </manifest>

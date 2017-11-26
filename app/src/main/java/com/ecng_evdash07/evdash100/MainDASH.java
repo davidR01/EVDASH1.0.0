@@ -61,7 +61,8 @@ public class MainDASH extends AppCompatActivity implements OnMapReadyCallback {
         if (googleServicesAvaliable()) {
             Toast.makeText(this, "Checking for play_services", Toast.LENGTH_SHORT).show();
         }
-        initMap();
+
+
         ////////////////////////////////////////////////////////////////////////////////////////
 
         mAdView=(AdView)findViewById(R.id.adView);
@@ -249,7 +250,11 @@ public class MainDASH extends AppCompatActivity implements OnMapReadyCallback {
     ////DECLARATION OF VARIABLES FOR RANDOM SPEED VALUE GENERATOR
     //int random;
 
-
+public void gotoNon_PremAds(View view)
+{
+    Intent intent =new Intent(this,Non_PremAds.class);
+    startActivity(intent);
+}
 
 
 
