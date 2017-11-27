@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SystemDiagnostics extends AppCompatActivity {
 
@@ -45,15 +47,17 @@ public class SystemDiagnostics extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         //Instantiating the buttons and text Views
-        tvBatteryVoltage = (TextView) findViewById(R.id.tvBatteryVoltage);
-        tvSumDistance = (TextView) findViewById(R.id.tvSumDistance);
-        tvAvgEnergy = (TextView) findViewById(R.id.tvAvgEnergy);
-        tvCoolTemp = (TextView) findViewById(R.id.tvCoolTemp);
-        tvAvgDistance = (TextView) findViewById(R.id.tvAvgDistance);
-        btnExport = (Button) findViewById(R.id.btnExport);
-        btnLog = (Button) findViewById(R.id.btnLog);
+        tvBatteryVoltage = findViewById(R.id.tvBatteryVoltage);
+        tvSumDistance = findViewById(R.id.tvSumDistance);
+        tvAvgEnergy = findViewById(R.id.tvAvgEnergy);
+        tvCoolTemp = findViewById(R.id.tvCoolTemp);
+        tvAvgDistance = findViewById(R.id.tvAvgDistance);
+        btnExport = findViewById(R.id.btnExport);
+        btnLog = findViewById(R.id.btnLog);
 
         vehicleMetrics = new ArrayList<VehicleMetrics>();
+
+
 
 
         btnExport.setOnClickListener(new View.OnClickListener() {
@@ -84,6 +88,22 @@ public class SystemDiagnostics extends AppCompatActivity {
         btnLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                final int MINUTES = 1;
+                final int increment = 0;
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        tvBatteryVoltage.setText(vehicleMetrics.get(increment).getBatteryVoltage()+"V");
+                        tvCoolTemp.setText(vehicleMetrics.get(increment).getCoolantTemp()+"`C");
+                        tvAvgDistance.setText(avgDistance()+"Km");
+                        tvAvgEnergy.setText(avgEnergy()+"J");
+                        tvSumDistance.setText(totalDistance()+"Km");
+                    }
+                }, 0,1000*60*MINUTES);
+
+
                 try{
                     //Creates a file, or looks for one then appends data to the end of the file
                     FileOutputStream file = openFileOutput("LoggedData.txt", MODE_APPEND);
@@ -95,7 +115,7 @@ public class SystemDiagnostics extends AppCompatActivity {
                     outputFile.flush();
                     outputFile.close();
 
-                    Toast.makeText(SystemDiagnostics.this, "Created a log File extension", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SystemDiagnostics.this, "Created a log File", Toast.LENGTH_SHORT).show();
 
                 }catch(Exception e){
                     Toast.makeText(SystemDiagnostics.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -153,5 +173,37 @@ public class SystemDiagnostics extends AppCompatActivity {
         );
 
         return metric;
+    }
+
+    private String avgDistance(){
+        double distance = 0.0 , count = 0.0;
+        String avgDistance;
+        for(int i = 0; i < vehicleMetrics.size(); i++){
+            distance = distance + Double.parseDouble(vehicleMetrics.get(i).getDistance());
+            count++;
+        }
+        avgDistance = String.valueOf(distance/count);
+        return avgDistance;
+    }
+
+    private String avgEnergy(){
+        double energy = 0.0 , count = 0.0;
+        String avgEnergy;
+        for(int i = 0; i < vehicleMetrics.size(); i++){
+            energy = energy + Double.parseDouble(vehicleMetrics.get(i).getDistance());
+            count++;
+        }
+        avgEnergy = String.valueOf(energy/count);
+        return avgEnergy;
+    }
+
+    private String totalDistance(){
+        double distance = 0.0, count = 0.0;
+        String Distance;
+        for(int i = 0; i< vehicleMetrics.size(); i++){
+            distance = distance + Double.parseDouble(vehicleMetrics.get(i).getDistance());
+        }
+        Distance = String.valueOf(distance);
+        return Distance;
     }
 }
