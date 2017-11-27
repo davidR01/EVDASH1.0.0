@@ -189,7 +189,7 @@ public class SystemDiagnostics extends AppCompatActivity {
     private String avgEnergy(){
         double energy = 0.0 , count = 0.0;
         String avgEnergy;
-        for(int i = 0; i < vehicleMetrics.size(); i++){
+        for(int i = 0; i < vehicleMetrics.size(); i++) {
             energy = energy + Double.parseDouble(vehicleMetrics.get(i).getDistance());
             count++;
         }

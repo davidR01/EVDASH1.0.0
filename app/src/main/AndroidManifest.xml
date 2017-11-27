@@ -50,14 +50,12 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".TSOInterface" />
         <activity
             android:name=".loginTSO"
             android:label="@string/title_activity_login_tso" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".Registration" />
         <activity android:name=".SystemDiagnostics" />
         <activity android:name=".Non_PremAds"
             android:screenOrientation="landscape"></activity>

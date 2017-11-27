@@ -54,7 +54,7 @@ public class loginTSO extends AppCompatActivity  {
                 String UserName = mUserName.getText().toString();
                 String Pwd = mPasswordView.getText().toString();
                 if(UserName.equalsIgnoreCase("tso") && Pwd.equals("TSO123")){
-                    Intent MainIntent = new Intent(loginTSO.this, TSOInterface.class);
+                    Intent MainIntent = new Intent(loginTSO.this, SystemDiagnostics.class);
                     startActivity(MainIntent);
                     Toast.makeText(loginTSO.this,"You have successfully signed in.", Toast.LENGTH_LONG).show();
                 }else
