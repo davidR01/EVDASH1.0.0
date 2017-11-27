@@ -92,7 +92,7 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="log_data">Log Data</string>
     <string name="export">Export</string>
-    <string name="batteryvoltage">batteryVoltage</string>
+    <string name="batteryvoltage">Battery Voltage</string>
     <string name="average_energy_use">Average Energy Use</string>
     <string name="total_distance_travelled">Total Distance Travelled</string>
     <string name="average_distance">Average Distance</string>

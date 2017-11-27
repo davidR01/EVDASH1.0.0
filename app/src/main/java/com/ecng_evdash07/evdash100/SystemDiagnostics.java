@@ -22,7 +22,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -38,9 +40,11 @@ public class SystemDiagnostics extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_diagnostics);
+
+        //This sets the phones orientation to landscape
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-        //Instantiating the buttons and textviews
+        //Instantiating the buttons and text Views
         tvBatteryVoltage = (TextView) findViewById(R.id.tvBatteryVoltage);
         tvSumDistance = (TextView) findViewById(R.id.tvSumDistance);
         tvAvgEnergy = (TextView) findViewById(R.id.tvAvgEnergy);
@@ -80,7 +84,22 @@ public class SystemDiagnostics extends AppCompatActivity {
         btnLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //whatever the button does
+                try{
+                    //Creates a file, or looks for one then appends data to the end of the file
+                    FileOutputStream file = openFileOutput("LoggedData.txt", MODE_APPEND);
+                    OutputStreamWriter outputFile = new OutputStreamWriter(file);
+
+                    //Creates a time stamp for the logged data
+                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+                    outputFile.write("\n Data Log of: "+timeStamp+ "\n"+ analyzeMetrics());
+                    outputFile.flush();
+                    outputFile.close();
+
+                    Toast.makeText(SystemDiagnostics.this, "Created a log File extension", Toast.LENGTH_SHORT).show();
+
+                }catch(Exception e){
+                    Toast.makeText(SystemDiagnostics.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -99,8 +118,8 @@ public class SystemDiagnostics extends AppCompatActivity {
                     StringTokenizer tokens = new StringTokenizer(lineFF, ",");
                     VehicleMetrics vehicleMetric = new VehicleMetrics(tokens.nextToken(), tokens.nextToken(), tokens.nextToken(), tokens.nextToken());
                     vehicleMetrics.add(vehicleMetric);
-                    Toast.makeText(SystemDiagnostics.this, "Loaded the data",Toast.LENGTH_SHORT).show();
                 }
+                Toast.makeText(SystemDiagnostics.this, "Loaded the data",Toast.LENGTH_SHORT).show();
 
                 reader.close();
 
@@ -108,5 +127,31 @@ public class SystemDiagnostics extends AppCompatActivity {
             catch (IOException e){
                 Toast.makeText(SystemDiagnostics.this, e.getMessage(), Toast.LENGTH_SHORT ).show();
             }
+    }
+
+    private String analyzeMetrics(){
+
+        double metricHandlerVoltage = 0.0, metricHandlerDistance = 0.0, metricHandlerEnergy = 0.0, metricHandlerCoolantTemp = 0.0;
+        double count = 0.0;
+
+        for(int i = 0; i < vehicleMetrics.size(); i++){
+
+            metricHandlerVoltage = metricHandlerVoltage + Double.parseDouble(vehicleMetrics.get(i).getBatteryVoltage());
+            metricHandlerDistance = metricHandlerDistance + Double.parseDouble(vehicleMetrics.get(i).getDistance());
+            metricHandlerEnergy = metricHandlerEnergy + Double.parseDouble(vehicleMetrics.get(i).getEnergy());
+            metricHandlerCoolantTemp = metricHandlerCoolantTemp + Double.parseDouble(vehicleMetrics.get(i).getCoolantTemp());
+            count++;
+        }
+
+        double avgDistance = metricHandlerDistance / count;
+        double avgVoltage = metricHandlerVoltage/count;
+        double avgEnergy = metricHandlerEnergy/count;
+        double avgCoolantTemp = metricHandlerCoolantTemp/count;
+        String metric = ("Average Voltage: " + String.valueOf(avgVoltage) + "\n"+ "Total Distance: " + String.valueOf(metricHandlerDistance)
+                + "\n" + "Average Distance: " + String.valueOf(avgDistance) + "\n" + "Average Energy: " + String.valueOf(avgEnergy)
+                + "\n" + "Average Coolant Temperature: " + String.valueOf(avgCoolantTemp)
+        );
+
+        return metric;
     }
 }
