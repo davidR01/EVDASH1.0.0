@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/EVDASH1.0.0.iml" filepath="$PROJECT_DIR$/EVDASH1.0.0.iml" />
-      <module fileurl="file://C:\Users\Sanjaya\Desktop\EVdash\V3.0\EVDASH1.0.0\EVDASH1.0.0.iml" filepath="C:\Users\Sanjaya\Desktop\EVdash\V3.0\EVDASH1.0.0\EVDASH1.0.0.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Sanjaya\Desktop\EVdash\V3.0\EVDASH1.0.0\app\app.iml" filepath="C:\Users\Sanjaya\Desktop\EVdash\V3.0\EVDASH1.0.0\app\app.iml" />
     </modules>
   </component>
 </project>

@@ -43,7 +43,7 @@ public class loginTSO extends AppCompatActivity  {
         setContentView(R.layout.activity_login_tso);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         // Set up the login form.
-        // declaring obejct of EditText control
+        // declaring object of EditText control
         mUserName = (EditText) findViewById(R.id.txtUserName);
         mPasswordView = (EditText) findViewById(R.id.txtPassword);
 

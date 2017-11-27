@@ -18,7 +18,6 @@ public class TSOInterface extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         registerBtn = (Button) findViewById(R.id.registerBtn);
-        ctrlAdBtn = (Button) findViewById(R.id.ctrlAdBtn);
         sysDiagnosticBtn = (Button) findViewById(R.id.sysDiagnosticBtn);
 
         //Details Register button functionality
@@ -27,15 +26,6 @@ public class TSOInterface extends AppCompatActivity {
             public void onClick(View view) {
                 Intent registerScrn = new Intent(TSOInterface.this, Registration.class);
                 startActivity(registerScrn);
-            }
-        });
-
-        //Details Control Advertisement button functionality
-        ctrlAdBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent ctrlScrn = new Intent(TSOInterface.this, AdControl.class);
-                startActivity(ctrlScrn);
             }
         });
 
